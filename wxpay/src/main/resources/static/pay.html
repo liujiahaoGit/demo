@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+  <title>微信支付页</title>
+  <link rel="stylesheet" type="text/css" href="css/webbase.css"/>
+  <link rel="stylesheet" type="text/css" href="css/pages-weixinpay.css"/>
+  <!--引入jQuery和qrious相关类库-->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/qrious.js"></script>
+
+
+</head>
+
+<body>
+<!--head-->
+<div>
+  <!--主内容-->
+  <div class="pay">
+    <div class="checkout-tit">
+      <h4 class="fl tit-txt">
+        <span class="success-icon"></span><span class="success-info">订单提交成功，请您及时付款！订单号：<span id="out_trade_no"></span></span>
+      </h4>
+      <span class="fr"><em class="sui-lead">应付金额：</em><em class="orange money">￥</em><span id="money"></span>元</span>
+      <div class="clearfix"></div>
+    </div>
+    <div class="checkout-steps">
+      <div class="fl weixin">微信支付</div>
+      <div class="fl sao">
+        <p class="red"></p>
+        <div class="fl code">
+          <img id="qrious">
+          <div class="saosao">
+            <p>请使用微信扫一扫</p>
+            <p>扫描二维码支付</p>
+          </div>
+        </div>
+        <div class="fl phone">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    //页面一加载就调用
+    window.onload = function() {
+        createNative()
+    }
+
+    /*统一下单接口调用*/
+    function createNative() {
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8080/createNative',
+            success: function(data) {
+                console.log(data);
+                $("#money").html((data.money / 100).toFixed(2))
+                $("#out_trade_no").html(data.out_trade_no)
+                /*调用后端统一下单接口根据返回的code_url 用qrious生成二维码*/
+                var qr = new QRious({
+                    element: document.getElementById('qrious'),
+                    size: 250,
+                    level: 'H', //二维码容错级别
+                    value: data.code_url
+                });
+                orderQuery(data.out_trade_no)
+            }
+        })
+    }
+
+    /*查询订单接口调用*/
+    function orderQuery(out_trade_no) {
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8080/orderQuery?outTradeNo=' + out_trade_no,
+            success: function(data) {
+                console.log(data);
+
+                if (data.trade_state == "SUCCESS") {
+                    location.href = 'paysuccess.html?money=' + ((data.total_fee) / 100).toFixed(2)
+                } else {
+                    if (data.msg == "二维码已超时") {
+                        console.log(data.msg);
+                        //二维码超时后重新生成二维码
+                        createNative();
+                    } else {
+
+                        location.href = 'payfail.html'
+                    }
+                }
+
+            }
+        })
+    }
+
+
+</script>
+</body>
+
+</html>
