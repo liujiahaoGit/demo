@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>简化模式</title>
+</head>
+<script src="../../../../target/classes/static/jquery-2.2.3.min.js"></script>
+<body>
+
+<!--
+response_type：表示授权类型，此处的值固定为"token"，必选项。
+client_id：表示客户端的ID，必选项。
+redirect_uri：表示重定向的URI，可选项。
+scope：表示权限范围，可选项。
+state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。
+-->
+
+<a href="http://localhost:8080/oauth/authorize?client_id=javaboy&response_type=token&scope=all&redirect_uri=http://localhost:8082/hello.html">第三方登录（简化模式）</a>
+
+<div id="result"></div>
+
+<script>
+    //#access_token=c10d3ee1-d5bf-4f55-928e-87350c9834a2&token_type=bearer&expires_in=7199
+    var params = window.location.hash; //拿到地址栏#后面的参数(包括#)
+    if (params && params.length > 0) {
+        var par = params.substring("1").split("&");
+        var token = par[0].split("=");
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8081/admin/hello', //访问被保护的资源
+            headers: {
+                'Authorization': 'Bearer ' + token[1]
+            },
+            success: function(data) {
+                $("#result").html(data)
+
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

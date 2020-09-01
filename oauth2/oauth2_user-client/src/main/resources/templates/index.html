@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>授权码模式</title>
+</head>
+<body>
+
+<!--
+response_type：表示授权类型，必选项，此处的值固定为"code"
+client_id：表示客户端的ID，必选项
+redirect_uri：表示重定向URI，可选项
+scope：表示申请的权限范围，可选项
+state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。
+-->
+
+<a href="http://localhost:8080/oauth/authorize?client_id=javaboy&response_type=code&scope=all&redirect_uri=http://localhost:8082/index.html">第三方登录</a>
+
+<h1 th:text="${msg}"></h1>
+</body>
+</html>
