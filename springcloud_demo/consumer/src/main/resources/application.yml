@@ -1,0 +1,11 @@
+
+
+server:
+  port: 1114
+spring:
+  application:
+    name: consumer
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaA:1111/eureka #这里注册到A后 A会自动同步到B

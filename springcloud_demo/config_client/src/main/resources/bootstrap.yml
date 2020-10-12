@@ -31,6 +31,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://eurekaA:1111/eureka #这里注册到A后 A会自动同步到B
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+
 
 #將refresh端点暴露出来
 management:
@@ -38,6 +41,8 @@ management:
     web:
       exposure:
         include: refresh
+
+
 
 
 

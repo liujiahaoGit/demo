@@ -1,0 +1,20 @@
+
+server:
+  port: 1113
+spring:
+  application:
+    name: provider
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaA:1111/eureka #这里注册到A后 A会自动同步到B
+
+#配置每秒中处理1个请求
+resilience4j:
+  ratelimiter:
+    limiters:
+      rla:
+        limit-for-period: 1
+        limit-refresh-period: 1s
+        timeout-duration: 1s
+

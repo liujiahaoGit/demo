@@ -1,0 +1,10 @@
+server:
+  port: 1115
+
+spring:
+  application:
+    name: hystrix
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaA:1111/eureka #这里注册到A后 A会自动同步到B

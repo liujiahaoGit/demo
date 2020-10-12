@@ -1,0 +1,32 @@
+
+
+server:
+  port: 1116
+spring:
+  application:
+    name: openFegin
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaA:1111/eureka #这里注册到A后 A会自动同步到B
+
+logging:
+  level:
+    com:
+      cicro:
+        openfegin: debug
+feign:
+  hystrix:
+    enabled: true
+  compression:
+    request:
+      #开启请求的数据压缩
+      enabled: true
+      #压缩的数据类型
+      mime-types: text/xml,application/json
+      #压缩下限,当传输的数据大于2048时,才会进行数据压缩
+      min-request-size: 2048
+    response:
+      #开启相应的数据压缩
+      enabled: true
+

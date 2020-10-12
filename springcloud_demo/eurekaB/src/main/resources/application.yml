@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: eureka
+
+server:
+  port: 1112
+eureka:
+  client:
+    #搭建集群 因此要将它注册到eureka 开启
+    register-with-eureka: true
+    #表示是否从 Eureka Server 上获取注册信息
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eurekaA:1111/eureka #将此实例注册到另一个注册中心上
+  instance:
+    hostname: eurekaB #给该节点实例起名

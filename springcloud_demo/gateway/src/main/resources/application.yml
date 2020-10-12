@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #开启自动代理
+      routes:
+        - id: route
+          uri: lb://provider #所有请求都转发到provider服务上(lb表示带负载均衡的)
+          filters:
+            - AddRequestParameter=name,123
+          predicates:
+            - Method=GET
+  application:
+    name: gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaA:1111/eureka
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
